@@ -1,0 +1,15 @@
+# ESPHome secrets and build artifacts -- never commit
+secrets.yaml
+.esphome/
+*.bin
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
