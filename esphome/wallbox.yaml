@@ -62,6 +62,10 @@ globals:
   - id: rx_buf               # buffer to reassemble the fragmented notification
     type: std::string
     restore_value: false
+  - id: last_ok_ms           # millis() of the last VALID meter read (for the watchdog)
+    type: uint32_t
+    restore_value: false
+    initial_value: '0'
 
 ble_client:
   - mac_address: ${wallbox_mac}
@@ -127,6 +131,20 @@ interval:
   - interval: ${poll_interval}
     then:
       - script.execute: poll_all
+  # Self-heal watchdog: if the link is supposed to be up but we've had no valid meter
+  # data for 2 minutes, bounce the BLE connection (no manual power-cycle needed).
+  - interval: 30s
+    then:
+      - if:
+          condition:
+            lambda: |-
+              return id(wb_link).state && id(last_ok_ms) != 0 &&
+                     (millis() - id(last_ok_ms)) > 120000;
+          then:
+            - logger.log: "Watchdog: no valid meter data for 120 s -> reconnecting BLE"
+            - lambda: 'id(wallbox).set_enabled(false);'
+            - delay: 5s
+            - lambda: 'id(wallbox).set_enabled(true); id(last_ok_ms) = millis();'
 
 # === CONTROLS ================================================================
 switch:
@@ -139,7 +157,7 @@ switch:
     optimistic: true
     restore_mode: RESTORE_DEFAULT_ON
     turn_on_action:
-      - lambda: 'id(wallbox).set_enabled(true);'
+      - lambda: 'id(wallbox).set_enabled(true); id(last_ok_ms) = millis();'   # grace period
     turn_off_action:
       - lambda: 'id(wallbox).set_enabled(false);'
 
@@ -187,19 +205,25 @@ sensor:
         return atof(b.c_str() + i + strlen(k));
       };
       if (has("\"p1\"")) {                          // ---- r_dca: power meter ----
-        float load = num("\"p1\":") + num("\"p2\":") + num("\"p3\":");
-        id(house_load).publish_state(load);
-        id(p_l1).publish_state(num("\"p1\":"));
-        id(p_l2).publish_state(num("\"p2\":"));
-        id(p_l3).publish_state(num("\"p3\":"));
-        id(v_l1).publish_state(num("\"v1\":"));
-        id(v_l2).publish_state(num("\"v2\":"));
-        id(v_l3).publish_state(num("\"v3\":"));
-        id(c_l1).publish_state(num("\"c1\":") / 10.0f);   // deci-amps -> A
-        id(c_l2).publish_state(num("\"c2\":") / 10.0f);
-        id(c_l3).publish_state(num("\"c3\":") / 10.0f);
-        id(energy_kwh).publish_state(num("\"e\":") / 1000.0f);  // Wh -> kWh
-        ESP_LOGI("wb", "House load = %.0f W", load);
+        float v1 = num("\"v1\":");
+        if (v1 <= 0) {                              // meter not reporting -> skip (don't publish a bogus 0)
+          ESP_LOGW("wb", "meter read invalid (v1=0) -> skipped");
+        } else {
+          float load = num("\"p1\":") + num("\"p2\":") + num("\"p3\":");
+          id(house_load).publish_state(load);
+          id(p_l1).publish_state(num("\"p1\":"));
+          id(p_l2).publish_state(num("\"p2\":"));
+          id(p_l3).publish_state(num("\"p3\":"));
+          id(v_l1).publish_state(v1);
+          id(v_l2).publish_state(num("\"v2\":"));
+          id(v_l3).publish_state(num("\"v3\":"));
+          id(c_l1).publish_state(num("\"c1\":") / 10.0f);   // deci-amps -> A
+          id(c_l2).publish_state(num("\"c2\":") / 10.0f);
+          id(c_l3).publish_state(num("\"c3\":") / 10.0f);
+          id(energy_kwh).publish_state(num("\"e\":") / 1000.0f);  // Wh -> kWh
+          id(last_ok_ms) = millis();                // watchdog: a good read happened
+          ESP_LOGI("wb", "House load = %.0f W", load);
+        }
       } else if (has("external_meter_status")) {    // ---- r_sta: status/config ----
         id(charger_status).publish_state(num("\"charger_status\":"));
         id(ext_meter_status).publish_state(num("\"external_meter_status\":"));

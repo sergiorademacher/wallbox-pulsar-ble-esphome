@@ -149,6 +149,13 @@ Full details, byte layouts, method list and field meanings are in **[PROTOCOL.md
   Make sure the BLE-client sensor is `internal: true` and `House Load Power` is the separate
   `template` sensor (as shipped). The internal sensor must never publish its own value.
 
+- **It shows 0 / stops updating and a restart "fixes" it.**
+  Two causes: the BLE link went half-open (e.g. you opened the Wallbox app, which grabs the single
+  BLE slot), or the charger briefly lost its external meter (`v1` = 0). This firmware now (a) skips
+  publishing a reading when `v1` = 0 instead of showing a bogus 0, and (b) runs a **watchdog** that
+  reconnects the BLE link automatically if there's no valid data for ~2 minutes — so you shouldn't
+  need to power-cycle the ESP32.
+
 - **Running a Bluetooth proxy on the same ESP32.**
   Possible, but BLE connection slots are limited (≈3 on a C3). Set `esp32_ble: max_connections: 4`
   so the charger's client always gets a slot, or keep this ESP **dedicated** to the Wallbox.
