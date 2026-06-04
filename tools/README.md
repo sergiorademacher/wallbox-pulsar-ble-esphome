@@ -33,4 +33,10 @@ reboot.) The ESP32 firmware does not need any of this — its stack is LE-only.
 ### Notes
 - A USB BlueZ dongle that needs a patchram firmware blob (e.g. Broadcom BCM20702) must have that
   firmware installed, or the data channel will be unreliable. Built-in Pi radios are fine.
+  Community blobs: [winterheart/broadcom-bt-firmware](https://github.com/winterheart/broadcom-bt-firmware).
 - Aim for RSSI better than ~ -75 dBm; the connection handshake needs more signal than scanning.
+
+### Built with
+- [dbus-fast](https://github.com/Bluetooth-Devices/dbus-fast) — async BlueZ D-Bus library.
+- Inspired by [jagheterfredrik/wallbox-ble](https://github.com/jagheterfredrik/wallbox-ble). See the
+  repo root [README](../README.md#credits--acknowledgments) for full credits.

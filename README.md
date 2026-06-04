@@ -199,7 +199,25 @@ This is an **independent, community** project. **Use entirely at your own risk.*
 
 If you are a rights holder and have a concern about this repository, please open an issue.
 
-## Credits
+## Credits & acknowledgments
 
 A community reverse-engineering effort, built on top of [ESPHome](https://esphome.io) and
-[Home Assistant](https://www.home-assistant.io). Licensed under the [MIT License](LICENSE).
+[Home Assistant](https://www.home-assistant.io).
+
+This project stands on the shoulders of prior work — thank you to:
+
+- **[jagheterfredrik/wallbox-ble](https://github.com/jagheterfredrik/wallbox-ble)** — Home Assistant
+  component for local control of the Wallbox Pulsar Plus over BLE. This was the starting point and
+  inspiration for the whole BLE approach and the `EaE` framing concept. Note: the firmware family
+  targeted here exposes a *different* vendor service/characteristics and method set
+  (`r_dca` / `r_dat` / `r_sta`), so the details in [PROTOCOL.md](PROTOCOL.md) were independently
+  re-derived for it.
+- **[jagheterfredrik/wallbox-tooling](https://github.com/jagheterfredrik/wallbox-tooling)** — tools
+  and proofs of concept for extending the Pulsar Plus.
+- **[winterheart/broadcom-bt-firmware](https://github.com/winterheart/broadcom-bt-firmware)** —
+  patchram firmware blobs for Broadcom USB Bluetooth dongles, used during development on Linux /
+  Raspberry Pi.
+- **[dbus-fast](https://github.com/Bluetooth-Devices/dbus-fast)** — the BlueZ D-Bus library used by
+  the Linux reference tool in [`tools/`](tools/).
+
+Licensed under the [MIT License](LICENSE).
