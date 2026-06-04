@@ -301,4 +301,4 @@ text_sensor:
     icon: "mdi:chip"
     entity_category: diagnostic
     update_interval: 60s
-    lambda: 'return {App.get_compilation_time()};'
+    lambda: 'return {App.get_build_time_string()};'
