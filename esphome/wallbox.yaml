@@ -295,10 +295,8 @@ sensor:
 # Firmware build timestamp -- changes on every recompile, so you can confirm a new
 # build is actually running (visible in HA and over the native API).
 text_sensor:
-  - platform: template
+  - platform: version
     name: "Firmware Build"
-    id: fw_build
     icon: "mdi:chip"
+    hide_timestamp: false        # include the compile timestamp -> changes every build
     entity_category: diagnostic
-    update_interval: 60s
-    lambda: 'return {App.get_build_time_string()};'
