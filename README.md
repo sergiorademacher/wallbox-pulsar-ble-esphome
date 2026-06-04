@@ -47,13 +47,14 @@ This has been validated on an **ESP32-C3 (LOLIN C3 mini)** with ESPHome 2026.5 /
 
 ---
 
-## Setup
+## Installation
 
-### 1. Install ESPHome
-```bash
-pip install esphome
-```
-…or use the Home Assistant **ESPHome** add-on / dashboard.
+> TL;DR: drop `wallbox.yaml` + `secrets.yaml` into ESPHome, set your charger's MAC, flash, done.
+
+### 1. Get ESPHome
+Use whichever you prefer:
+- **Home Assistant add-on** — *Settings → Add-ons → ESPHome Device Builder* (recommended for HA users), or
+- **CLI** — `pip install esphome`.
 
 ### 2. Secrets
 ```bash
@@ -79,9 +80,20 @@ substitutions:
 > unit wired to the meter — usually the **master**. Either unit is connectable once paired.
 
 ### 4. Flash
+
+**Option A — Home Assistant ESPHome add-on (GUI, easiest for HA users)**
+1. Open the **ESPHome Device Builder** add-on → **Open Web UI**.
+2. Put `wallbox.yaml` and `secrets.yaml` into `/config/esphome/` (via the *File editor* or *Samba*
+   add-on), or click **+ New device** and paste the contents of `wallbox.yaml`.
+3. Click the device → **Install**. The **first** flash must be over **USB** — either plug the ESP32
+   into the machine running ESPHome, or use [ESPHome Web](https://web.esphome.io) from a Chrome-based
+   browser. After that, updates go **OTA** over WiFi.
+4. Open **Logs** to watch it connect.
+
+**Option B — ESPHome CLI**
 ```bash
 cd esphome
-esphome run wallbox.yaml          # first time over USB, then OTA over WiFi
+esphome run wallbox.yaml          # USB the first time, then OTA over WiFi
 esphome logs wallbox.yaml         # watch it connect
 ```
 
