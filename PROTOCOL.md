@@ -3,8 +3,12 @@
 This documents the local **Bluetooth Low Energy** protocol used by a Wallbox Pulsar / Pulsar Plus
 firmware family whose vendor GATT service is `2456e1b9-26e2-8f83-e744-f34f01e9d701`.
 
-> Reverse-engineered from observed traffic; field meanings are best-effort and some are inferred.
-> Corrections / additions welcome. This is **not** official documentation.
+> Reverse-engineered by observing local Bluetooth traffic with the owner's own device, for
+> interoperability and personal use. Field meanings are best-effort and some are inferred;
+> corrections / additions welcome. This is **not** official documentation, and this project is
+> independent and not affiliated with or endorsed by Wallbox Chargers, S.L. Trademarks belong to
+> their respective owners. No proprietary firmware or source code is included. See the
+> [Disclaimer](README.md#disclaimer). **Use at your own risk.**
 
 ---
 

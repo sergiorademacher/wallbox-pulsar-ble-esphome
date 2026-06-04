@@ -172,8 +172,34 @@ See [tools/README.md](tools/README.md).
 
 ---
 
-## Credits & disclaimer
+## Disclaimer
 
-Community reverse-engineering effort. Not affiliated with or endorsed by Wallbox Chargers S.L.
-"Wallbox", "Pulsar" and "Power Boost" are trademarks of their respective owners. Use at your own
-risk. Licensed under the [MIT License](LICENSE).
+This is an **independent, community** project. **Use entirely at your own risk.**
+
+- **No affiliation / no endorsement.** This project is not affiliated with, authorized, sponsored,
+  or endorsed by Wallbox Chargers, S.L. or any of its affiliates.
+- **Trademarks.** "Wallbox", "Pulsar", "Pulsar Plus" and "Power Boost" are trademarks of their
+  respective owners. They are used here **only for identification and descriptive purposes**
+  (nominative fair use) to indicate compatibility. No claim is made to any such mark.
+- **No warranty.** The software is provided "AS IS", without warranty of any kind, as stated in the
+  [MIT License](LICENSE). The authors and contributors are **not liable** for any damage to your
+  charger, devices, property, data, or for any loss or injury, however caused.
+- **You are responsible.** Connecting to, pairing with, or reading from your charger may be subject
+  to the manufacturer's terms of use and **may void your warranty**. You are solely responsible for
+  ensuring your use complies with all **applicable laws, regulations, and agreements** in your
+  jurisdiction, and with your charger's terms and conditions.
+- **Reverse engineering.** The protocol notes were derived by observing local Bluetooth traffic with
+  the owner's own device, for **interoperability and personal use**. No proprietary firmware,
+  source code, or confidential material is included or redistributed.
+- **Accuracy.** Field meanings are best-effort and may be wrong or incomplete. **Do not rely on
+  these values for billing, safety-critical, or protective functions.**
+- **Read-only.** This firmware only reads data; it does not change charger settings or wiring. Do
+  not perform any electrical work yourself — consult a qualified electrician for anything involving
+  mains wiring or the meter installation.
+
+If you are a rights holder and have a concern about this repository, please open an issue.
+
+## Credits
+
+A community reverse-engineering effort, built on top of [ESPHome](https://esphome.io) and
+[Home Assistant](https://www.home-assistant.io). Licensed under the [MIT License](LICENSE).
