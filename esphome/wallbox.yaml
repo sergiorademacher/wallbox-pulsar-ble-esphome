@@ -291,3 +291,14 @@ sensor:
   - platform: uptime
     name: "Uptime"
     entity_category: diagnostic
+
+# Firmware build timestamp -- changes on every recompile, so you can confirm a new
+# build is actually running (visible in HA and over the native API).
+text_sensor:
+  - platform: template
+    name: "Firmware Build"
+    id: fw_build
+    icon: "mdi:chip"
+    entity_category: diagnostic
+    update_interval: 60s
+    lambda: 'return {App.get_compilation_time()};'
